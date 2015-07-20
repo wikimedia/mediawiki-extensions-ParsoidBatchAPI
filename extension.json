@@ -1,0 +1,26 @@
+{
+	"name": "ParsoidBatchAPI",
+	"author": "Tim Starling",
+	"version": "1.0.0",
+	"url": "https://www.mediawiki.org/wiki/Extension:ParsoidBatchAPI",
+	"descriptionmsg": "parsoidbatchapi-description",
+	"license-name": "CC0-1.0",
+	"manifest_version": 1,
+	"APIModules": {
+		"parsoid-batch": {
+			"class": "ApiParsoidBatch"
+		}
+	},
+	"AutoloadClasses": {
+		"ApiParsoidBatch": "includes/ApiParsoidBatch.php"
+	},
+	"MessagesDirs": {
+		"ParsoidBatchAPI": "i18n"
+	},
+	"config": {
+		"ParsoidBatchAPI_AllowedIPs": [
+			"0.0.0.0/0",
+			"::/0"
+		]
+	}
+}
