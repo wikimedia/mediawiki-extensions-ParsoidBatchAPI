@@ -3,7 +3,7 @@
 	"author": "Tim Starling",
 	"version": "1.0.0",
 	"url": "https://www.mediawiki.org/wiki/Extension:ParsoidBatchAPI",
-	"descriptionmsg": "parsoidbatchapi-description",
+	"descriptionmsg": "parsoidbatchapi-desc",
 	"license-name": "CC0-1.0",
 	"manifest_version": 1,
 	"APIModules": {

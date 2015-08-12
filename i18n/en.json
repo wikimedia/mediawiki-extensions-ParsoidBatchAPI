@@ -1,3 +1,8 @@
 {
-	"parsoidbatchapi-description": "Batch API for Parsoid"
+	"@metadata": {
+		"authors": [
+			"Tim Starling"
+		]
+	},
+	"parsoidbatchapi-desc": "Batch API for Parsoid"
 }
