@@ -75,7 +75,7 @@ class ApiParsoidBatch extends ApiBase {
 			} elseif ( $action === 'imageinfo' ) {
 				$filename = $itemParams['filename'];
 				$file = isset( $files[$filename] ) ? $files[$filename] : null;
-				$txopts = isset( $itemParams['txopts'] ) ? $itemParams['txopts'] : null;
+				$txopts = isset( $itemParams['txopts'] ) ? $itemParams['txopts'] : array();
 				$itemResult = $this->imageinfo( $filename, $file, $txopts );
 			} else {
 				throw new Exception( "Invalid action despite validation already being done" );
@@ -190,24 +190,56 @@ class ApiParsoidBatch extends ApiBase {
 			'url' => wfExpandUrl( $file->getFullURL(), PROTO_CURRENT )
 		);
 
-		if ( $txopts ) {
-			$mto = $file->transform( $txopts );
-			if ( $mto ) {
-				if ( $mto->isError() ) {
-					$result['thumberror'] = $mto->toText();
-				} else {
-					// Proposed MediaTransformOutput serialization method for T51896 etc.
-					if ( is_callable( $mto, 'getAPIData' ) ) {
-						$result['thumbdata'] = $mto->getAPIData();
-					}
-
-					$result['thumburl'] = wfExpandUrl( $mto->getUrl(), PROTO_CURRENT );
-					$result['thumbwidth'] = $mto->getWidth();
-					$result['thumbheight'] = $mto->getHeight();
+		$txopts = $this->makeTransformOptions( $file, $txopts );
+		$mto = $file->transform( $txopts );
+		if ( $mto ) {
+			if ( $mto->isError() ) {
+				$result['thumberror'] = $mto->toText();
+			} else {
+				// Proposed MediaTransformOutput serialization method for T51896 etc.
+				if ( is_callable( $mto, 'getAPIData' ) ) {
+					$result['thumbdata'] = $mto->getAPIData();
 				}
+
+				$result['thumburl'] = wfExpandUrl( $mto->getUrl(), PROTO_CURRENT );
+				$result['thumbwidth'] = $mto->getWidth();
+				$result['thumbheight'] = $mto->getHeight();
 			}
 		}
 		return $result;
+	}
+
+	protected function makeTransformOptions( $file, $hp ) {
+		// Validate the input parameters like Parser::makeImage()
+		$handler = $file->getHandler();
+		if ( !$handler ) {
+			return array(); // will get iconThumb()
+		}
+		foreach ( $hp as $name => $value ) {
+			if ( !$handler->validateParam( $name, $value ) ) {
+				unset( $hp[$name] );
+			}
+		}
+
+		// This part is similar to Linker::makeImageLink(). If there is no width,
+		// set one based on the source file size.
+		$page = isset( $hp['page'] ) ? $hp['page'] : false;
+		if ( !isset( $hp['width'] ) ) {
+			if ( isset( $hp['height'] ) && $file->isVectorized() ) {
+				// If it's a vector image, and user only specifies height
+				// we don't want it to be limited by its "normal" width.
+				global $wgSVGMaxSize;
+				$hp['width'] = $wgSVGMaxSize;
+			} else {
+				$hp['width'] = $file->getWidth( $page );
+			}
+
+			// We don't need to fill in a default thumbnail width here, since
+			// that is done by Parsoid. Parsoid always sets the width parameter
+			// for thumbnails.
+		}
+
+		return $hp;
 	}
 
 	public function isInternal() {
