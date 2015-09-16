@@ -187,7 +187,8 @@ class ApiParsoidBatch extends ApiBase {
 			'width' => $file->getWidth(),
 			'height' => $file->getHeight(),
 			'mediatype' => $file->getMediaType(),
-			'url' => wfExpandUrl( $file->getFullURL(), PROTO_CURRENT )
+			'url' => wfExpandUrl( $file->getFullURL(), PROTO_CURRENT ),
+			'mustRender' => $file->mustRender()
 		);
 
 		$txopts = $this->makeTransformOptions( $file, $txopts );
