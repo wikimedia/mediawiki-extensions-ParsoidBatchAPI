@@ -39,7 +39,10 @@ class ApiParsoidBatch extends ApiBase {
 						$this->assertScalar( $txopts, $k );
 					}
 				}
-				$filenames[] = $itemParams['filename'];
+				// Normalize the filename in $batch so that we can find the corresponding
+				// file in the findFiles() result
+				$title = Title::makeTitleSafe( NS_FILE, $itemParams['filename'] );
+				$filenames[] = $batch[$itemIndex]['filename'] = $title->getDBkey();
 			} else {
 				$this->dieUsage( "Invalid action in item index $itemIndex", 'invalid_action' );
 			}
@@ -51,6 +54,8 @@ class ApiParsoidBatch extends ApiBase {
 		// Now do the thing
 		if ( count( $filenames ) ) {
 			$files = RepoGroup::singleton()->findFiles( $filenames );
+		} else {
+			$files = array();
 		}
 
 		$batchResult = array();
