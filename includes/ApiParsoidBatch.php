@@ -42,7 +42,9 @@ class ApiParsoidBatch extends ApiBase {
 				// Normalize the filename in $batch so that we can find the corresponding
 				// file in the findFiles() result
 				$title = Title::makeTitleSafe( NS_FILE, $itemParams['filename'] );
-				$filenames[] = $batch[$itemIndex]['filename'] = $title->getDBkey();
+				if ( $title ) {
+					$filenames[] = $batch[$itemIndex]['filename'] = $title->getDBkey();
+				}
 			} else {
 				$this->dieUsage( "Invalid action in item index $itemIndex", 'invalid_action' );
 			}
