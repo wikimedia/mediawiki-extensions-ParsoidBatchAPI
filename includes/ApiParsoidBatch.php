@@ -20,6 +20,9 @@ class ApiParsoidBatch extends ApiBase {
 		if ( count( $batch ) > 500 ) {
 			$this->dieUsage( "Batch too large, limit is 500", 'batch_too_large' );
 		}
+		wfIncrStats( 'ParsoidBatchAPI.batches' );
+		wfIncrStats( 'ParsoidBatchAPI.items', count( $batch ) );
+
 		$size = 0;
 		$filenames = array();
 		foreach ( $batch as $itemIndex => $itemParams ) {
