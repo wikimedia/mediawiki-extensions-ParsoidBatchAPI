@@ -4,5 +4,7 @@
 			"Tim Starling"
 		]
 	},
-	"parsoidbatchapi-desc": "Batch API for Parsoid"
+	"parsoidbatchapi-desc": "Batch API for Parsoid",
+	"apihelp-parsoid-batch-description": "",
+	"apihelp-parsoid-batch-param-batch": ""
 }

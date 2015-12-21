@@ -4,5 +4,7 @@
 			"Raimond Spekking"
 		]
 	},
-	"parsoidbatchapi-desc": "{{desc|name=ParsoidBatchAPI|url=https://www.mediawiki.org/wiki/Extension:ParsoidBatchAPI}}"
+	"parsoidbatchapi-desc": "{{desc|name=ParsoidBatchAPI|url=https://www.mediawiki.org/wiki/Extension:ParsoidBatchAPI}}",
+	"apihelp-parsoid-batch-description": "{{doc-apihelp-description|parsoid-batch}}",
+	"apihelp-parsoid-batch-param-batch": "{{doc-apihelp-param|parsoid-batch|batch}}"
 }
