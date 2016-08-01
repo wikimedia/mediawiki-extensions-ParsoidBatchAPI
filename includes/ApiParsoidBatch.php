@@ -99,7 +99,7 @@ class ApiParsoidBatch extends ApiBase {
 			ApiResult::NO_VALIDATE );
 	}
 
-	protected function assertScalar( $array, $key ) {
+	protected function assertScalar( array $array, $key ) {
 		if ( !isset( $array[$key] ) ) {
 			$this->dieUsage(
 				"The $key parameter is required",
@@ -112,7 +112,7 @@ class ApiParsoidBatch extends ApiBase {
 		}
 	}
 
-	protected function assertScalarOrMissing( $array, $key ) {
+	protected function assertScalarOrMissing( array $array, $key ) {
 		if ( isset( $array[$key] ) && !is_scalar( $array[$key] ) ) {
 			$this->dieUsage(
 				"The $key parameter must be a scalar",
@@ -120,7 +120,7 @@ class ApiParsoidBatch extends ApiBase {
 		}
 	}
 
-	protected function assertArray( $array, $key ) {
+	protected function assertArray( array $array, $key ) {
 		if ( !isset( $array[$key] ) ) {
 			$this->dieUsage(
 				"The $key parameter is required",
@@ -133,7 +133,15 @@ class ApiParsoidBatch extends ApiBase {
 		}
 	}
 
-	protected function parse( $text, $title ) {
+	/**
+	 * @param string $text
+	 * @param Title $title
+	 *
+	 * @return array
+	 * @throws MWException
+	 * @throws MWUnknownContentModelException
+	 */
+	protected function parse( $text, Title $title ) {
 		global $wgParser;
 
 		$contentHandler = ContentHandler::getForModelID( CONTENT_MODEL_WIKITEXT );
@@ -149,7 +157,16 @@ class ApiParsoidBatch extends ApiBase {
 		);
 	}
 
-	protected function preprocess( $text, $title, $revid ) {
+	/**
+	 * @param string $text
+	 * @param Title $title
+	 * @param int|bool $revid
+	 *
+	 * @return array
+	 * @throws MWException
+	 * @throws MWUnknownContentModelException
+	 */
+	protected function preprocess( $text, Title $title, $revid ) {
 		global $wgParser;
 
 		$contentHandler = ContentHandler::getForModelID( CONTENT_MODEL_WIKITEXT );
@@ -166,7 +183,7 @@ class ApiParsoidBatch extends ApiBase {
 		);
 	}
 
-	protected function formatCategoryLinks( $links ) {
+	protected function formatCategoryLinks( array $links ) {
 		$result = array();
 		foreach ( $links as $link => $sortkey ) {
 			$result[] = array(
@@ -177,7 +194,7 @@ class ApiParsoidBatch extends ApiBase {
 		return $result;
 	}
 
-	protected function formatProperties( $props ) {
+	protected function formatProperties( array $props ) {
 		$result = array();
 		foreach ( $props as $name => $value ) {
 			$result[] = array(
@@ -188,7 +205,14 @@ class ApiParsoidBatch extends ApiBase {
 		return $result;
 	}
 
-	protected function imageinfo( $filename, $file, $txopts ) {
+	/**
+	 * @param string $filename
+	 * @param File|null $file
+	 * @param array $txopts
+	 *
+	 * @return array|null
+	 */
+	protected function imageinfo( $filename, $file, array $txopts ) {
 		if ( !$file ) {
 			// Short return code for missing images
 			return null;
@@ -197,7 +221,7 @@ class ApiParsoidBatch extends ApiBase {
 			'width' => $file->getWidth(),
 			'height' => $file->getHeight(),
 			'mediatype' => $file->getMediaType(),
-			'url' => wfExpandUrl( $file->getFullURL(), PROTO_CURRENT ),
+			'url' => wfExpandUrl( $file->getFullUrl(), PROTO_CURRENT ),
 			'mustRender' => $file->mustRender()
 		);
 
@@ -229,7 +253,13 @@ class ApiParsoidBatch extends ApiBase {
 		return $result;
 	}
 
-	protected function makeTransformOptions( $file, $hp ) {
+	/**
+	 * @param File $file
+	 * @param array $hp
+	 *
+	 * @return array
+	 */
+	protected function makeTransformOptions( $file, array $hp ) {
 		// Validate the input parameters like Parser::makeImage()
 		$handler = $file->getHandler();
 		if ( !$handler ) {
