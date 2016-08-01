@@ -241,7 +241,7 @@ class ApiParsoidBatch extends ApiBase {
 				}
 
 				// Proposed MediaTransformOutput serialization method for T51896 etc.
-				if ( is_callable( $mto, 'getAPIData' ) ) {
+				if ( is_callable( [ $mto, 'getAPIData' ] ) ) {
 					$result['thumbdata'] = $mto->getAPIData();
 				}
 
