@@ -6,5 +6,13 @@
 	},
 	"parsoidbatchapi-desc": "{{desc|name=ParsoidBatchAPI|url=https://www.mediawiki.org/wiki/Extension:ParsoidBatchAPI}}",
 	"apihelp-parsoid-batch-description": "{{doc-apihelp-description|parsoid-batch}}",
-	"apihelp-parsoid-batch-param-batch": "{{doc-apihelp-param|parsoid-batch|batch}}"
+	"apihelp-parsoid-batch-param-batch": "{{doc-apihelp-param|parsoid-batch|batch}}",
+	"apierror-parsoid-batch-batchtoolarge": "{{doc-apierror}}",
+	"apierror-parsoid-batch-invalidaction": "{{doc-apierror}}\n\nParameters:\n* $1 - Item index",
+	"apierror-parsoid-batch-invalidbatch": "{{doc-apierror}}",
+	"apierror-parsoid-batch-invalidtitle": "{{doc-apierror}}\n\nParameters:\n* $1 - Item index",
+	"apierror-parsoid-batch-mustbearray": "{{doc-apierror}}\n\nParameters:\n* $1 - Parameter name",
+	"apierror-parsoid-batch-mustbescalar": "{{doc-apierror}}\n\nParameters:\n* $1 - Parameter name",
+	"apierror-parsoid-batch-notallowed": "{{doc-apierror}}",
+	"apierror-parsoid-batch-texttoobig": "{{doc-apierror}}"
 }
