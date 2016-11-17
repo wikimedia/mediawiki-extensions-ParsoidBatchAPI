@@ -1,5 +1,7 @@
 <?php
 
+use IPSet\IPSet;
+
 class ApiParsoidBatch extends ApiBase {
 	public function execute() {
 		$params = $this->extractRequestParams();
