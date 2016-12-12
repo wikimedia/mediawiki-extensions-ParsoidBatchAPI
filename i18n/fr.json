@@ -1,8 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
-			"Momo50WM"
+			"Momo50WM",
+			"Derugon",
+			"Wladek92"
 		]
 	},
-	"parsoidbatchapi-desc": "Lot d'API pour Parsoid"
+	"parsoidbatchapi-desc": "Lot d'API pour Parsoid",
+	"apierror-parsoid-batch-batchtoolarge": "Batch trop grand, la limite est de 500.",
+	"apierror-parsoid-batch-invalidaction": "Action invalide dans l'élément d'index $1.",
+	"apierror-parsoid-batch-invalidtitle": "Titre invalide ($1).",
+	"apierror-parsoid-batch-mustbescalar": "Le paramètre <var>$1</var> doit être un scalaire."
 }

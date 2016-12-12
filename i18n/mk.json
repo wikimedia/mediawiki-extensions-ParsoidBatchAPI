@@ -4,5 +4,13 @@
 			"Bjankuloski06"
 		]
 	},
-	"parsoidbatchapi-desc": "Групен извршник за Parsoid"
+	"parsoidbatchapi-desc": "Групен извршник за Parsoid",
+	"apierror-parsoid-batch-notallowed": "IP-адресата на клиентот не е во ParsoidBatchAPI_AllowedIPs.",
+	"apierror-parsoid-batch-invalidbatch": "Неважечка група. Мора да биде низа.",
+	"apierror-parsoid-batch-batchtoolarge": "Групата е преголема. Ограничувањето е 500.",
+	"apierror-parsoid-batch-invalidaction": "Неважечко дејство во ставката со индекс $1.",
+	"apierror-parsoid-batch-texttoobig": "Внесениот текст ја надминува величинската граница на статијата.",
+	"apierror-parsoid-batch-invalidtitle": "Неважечки наслов ($1).",
+	"apierror-parsoid-batch-mustbescalar": "Параметарот <var>$1</var> мора да биде скаларен.",
+	"apierror-parsoid-batch-mustbearray": "Параметарот <var>$1</var> мора да биде низа."
 }
