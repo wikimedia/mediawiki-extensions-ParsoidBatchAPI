@@ -4,5 +4,6 @@
 			"Metalhead64"
 		]
 	},
-	"parsoidbatchapi-desc": "Stapel-API für Parsoid"
+	"parsoidbatchapi-desc": "Stapel-API für Parsoid",
+	"apierror-parsoid-batch-invalidtitle": "Ungültiger Titel ($1)."
 }
