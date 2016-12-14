@@ -56,6 +56,7 @@ class ApiParsoidBatch extends ApiBase {
 						$this->assertScalar( $txopts, $k );
 					}
 				}
+				$this->assertScalarOrMissing( $itemParams, 'page' );
 				// Normalize the filename in $batch so that we can find the corresponding
 				// file in the findFiles() result
 				$title = Title::makeTitleSafe( NS_FILE, $itemParams['filename'] );
@@ -116,7 +117,8 @@ class ApiParsoidBatch extends ApiBase {
 				$filename = $itemParams['filename'];
 				$file = isset( $files[$filename] ) ? $files[$filename] : null;
 				$txopts = isset( $itemParams['txopts'] ) ? $itemParams['txopts'] : array();
-				$itemResult = $this->imageinfo( $filename, $file, $txopts );
+				$page = isset( $itemParams['page'] ) ? Title::newFromText( $itemParams['page'] ) : null;
+				$itemResult = $this->imageinfo( $filename, $file, $txopts, $page );
 			} else {
 				throw new Exception( "Invalid action despite validation already being done" );
 			}
@@ -261,10 +263,11 @@ class ApiParsoidBatch extends ApiBase {
 	 * @param string $filename
 	 * @param File|null $file
 	 * @param array $txopts
+	 * @param Title|null $page Title for wfIsBadImage() context
 	 *
 	 * @return array|null
 	 */
-	protected function imageinfo( $filename, $file, array $txopts ) {
+	protected function imageinfo( $filename, $file, array $txopts, $page ) {
 		if ( !$file ) {
 			// Short return code for missing images
 			return null;
@@ -274,7 +277,8 @@ class ApiParsoidBatch extends ApiBase {
 			'height' => $file->getHeight(),
 			'mediatype' => $file->getMediaType(),
 			'url' => wfExpandUrl( $file->getFullUrl(), PROTO_CURRENT ),
-			'mustRender' => $file->mustRender()
+			'mustRender' => $file->mustRender(),
+			'badFile' => wfIsBadImage( $filename, $page ?: false ),
 		);
 
 		$txopts = $this->makeTransformOptions( $file, $txopts );
