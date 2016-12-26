@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Mainframe98"
+		]
+	},
+	"apierror-parsoid-batch-invalidtitle": "Ongeldige titel ($1)."
+}
