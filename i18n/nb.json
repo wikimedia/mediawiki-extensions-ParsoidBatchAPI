@@ -5,5 +5,9 @@
 		]
 	},
 	"parsoidbatchapi-desc": "Batch-API for Parsoid",
-	"apierror-parsoid-batch-notallowed": "Klientens IP-adresse er ikke i ParsoidBatchAPI_AllowedIPs."
+	"apierror-parsoid-batch-notallowed": "Klientens IP-adresse er ikke i ParsoidBatchAPI_AllowedIPs.",
+	"apierror-parsoid-batch-invalidaction": "Ugyldig handling i elementindeks $1.",
+	"apierror-parsoid-batch-invalidtitle": "Ugyldig tittel ($1).",
+	"apierror-parsoid-batch-mustbescalar": "Parameteren <var>$1</var> må være en skalar.",
+	"apierror-parsoid-batch-mustbearray": "Parameteren <var>$1</var> må være en tabell."
 }
