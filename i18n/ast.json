@@ -4,5 +4,13 @@
 			"Xuacu"
 		]
 	},
-	"parsoidbatchapi-desc": "API de trabayu por llotes pa Parsoid"
+	"parsoidbatchapi-desc": "API de trabayu por llotes pa Parsoid",
+	"apierror-parsoid-batch-notallowed": "La direición IP del cliente nun ta en ParsoidBatchAPI_AllowedIPs.",
+	"apierror-parsoid-batch-invalidbatch": "Batch inválidu, tien de ser una matriz.",
+	"apierror-parsoid-batch-batchtoolarge": "Batch enforma grande, la llende ye de 500.",
+	"apierror-parsoid-batch-invalidaction": "Aición inválida nel índiz d'elementos $1.",
+	"apierror-parsoid-batch-texttoobig": "El testu d'entrada pasa del tamañu máximu d'artículu.",
+	"apierror-parsoid-batch-invalidtitle": "Títulu inválidu ($1).",
+	"apierror-parsoid-batch-mustbescalar": "El parámetru <var>$1</var> tien de ser un valor escalar.",
+	"apierror-parsoid-batch-mustbearray": "El parámetru <var>$1</var> tien de ser una matriz."
 }
