@@ -4,5 +4,6 @@
 			"Mainframe98"
 		]
 	},
+	"parsoidbatchapi-desc": "Batch API voor Parsoid",
 	"apierror-parsoid-batch-invalidtitle": "Ongeldige titel ($1)."
 }
