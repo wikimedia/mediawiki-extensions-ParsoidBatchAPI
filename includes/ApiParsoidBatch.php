@@ -287,12 +287,15 @@ class ApiParsoidBatch extends ApiBase {
 			if ( $mto->isError() ) {
 				$result['thumberror'] = $mto->toText();
 			} else {
-				// Do srcset scaling
-				Linker::processResponsiveImages( $file, $mto, $txopts );
-				if ( count( $mto->responsiveUrls ) ) {
-					$result['responsiveUrls'] = array();
-					foreach ( $mto->responsiveUrls as $density => $url ) {
-						$result['responsiveUrls'][$density] = wfExpandUrl( $url, PROTO_CURRENT );
+				if ( $txopts ) {
+					// Do srcset scaling
+					Linker::processResponsiveImages( $file, $mto, $txopts );
+					if ( count( $mto->responsiveUrls ) ) {
+						$result['responsiveUrls'] = array();
+						foreach ( $mto->responsiveUrls as $density => $url ) {
+							$result['responsiveUrls'][$density] = wfExpandUrl(
+								$url, PROTO_CURRENT );
+						}
 					}
 				}
 
