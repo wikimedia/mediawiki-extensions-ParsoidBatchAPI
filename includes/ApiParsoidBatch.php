@@ -276,6 +276,7 @@ class ApiParsoidBatch extends ApiBase {
 			'width' => $file->getWidth(),
 			'height' => $file->getHeight(),
 			'mediatype' => $file->getMediaType(),
+			'mime' => $file->getMimeType(),
 			'url' => wfExpandUrl( $file->getFullUrl(), PROTO_CURRENT ),
 			'mustRender' => $file->mustRender(),
 			'badFile' => wfIsBadImage( $filename, $page ?: false ),
@@ -308,6 +309,8 @@ class ApiParsoidBatch extends ApiBase {
 				$result['thumbwidth'] = $mto->getWidth();
 				$result['thumbheight'] = $mto->getHeight();
 			}
+		} else {
+			$result['thumberror'] = "Presumably, invalid parameters, despite validation.";
 		}
 		return $result;
 	}
