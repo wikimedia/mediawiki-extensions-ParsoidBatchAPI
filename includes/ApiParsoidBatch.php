@@ -275,13 +275,17 @@ class ApiParsoidBatch extends ApiBase {
 		$result = array(
 			'width' => $file->getWidth(),
 			'height' => $file->getHeight(),
+			'size' => $file->getSize(),
 			'mediatype' => $file->getMediaType(),
 			'mime' => $file->getMimeType(),
 			'url' => wfExpandUrl( $file->getFullUrl(), PROTO_CURRENT ),
 			'mustRender' => $file->mustRender(),
 			'badFile' => wfIsBadImage( $filename, $page ?: false ),
 		);
-
+		$length = $file->getLength();
+		if ( $length ) {
+			$result['duration'] = (float)$length;
+		}
 		$txopts = $this->makeTransformOptions( $file, $txopts );
 		$mto = $file->transform( $txopts );
 		if ( $mto ) {
