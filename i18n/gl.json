@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Elisardojm"
+			"Elisardojm",
+			"Banjo"
 		]
 	},
-	"parsoidbatchapi-desc": "API de traballo por lotes para Parsoid"
+	"parsoidbatchapi-desc": "API de traballo por lotes para Parsoid",
+	"apierror-parsoid-batch-invalidtitle": "Título non válido ($1)."
 }
