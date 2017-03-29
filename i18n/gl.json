@@ -6,5 +6,9 @@
 		]
 	},
 	"parsoidbatchapi-desc": "API de traballo por lotes para Parsoid",
-	"apierror-parsoid-batch-invalidtitle": "Título non válido ($1)."
+	"apierror-parsoid-batch-invalidaction": "Acción incorrecta no elemento de índice $1.",
+	"apierror-parsoid-batch-texttoobig": "O texto introducido excede o tamaño máximo dun artigo.",
+	"apierror-parsoid-batch-invalidtitle": "Título non válido ($1).",
+	"apierror-parsoid-batch-mustbescalar": "O parámetro <var>$1</var> debe ser un escalar.",
+	"apierror-parsoid-batch-mustbearray": "O parámetro <var>$1</var> debe ser unha matriz."
 }
