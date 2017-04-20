@@ -6,6 +6,7 @@
 		]
 	},
 	"parsoidbatchapi-desc": "API de traballo por lotes para Parsoid",
+	"apierror-parsoid-batch-notallowed": "A dirección IP do cliente non figura en ParsoidBatchAPI_AllowedIPs.",
 	"apierror-parsoid-batch-invalidbatch": "Batch incorrecto, debe ser unha matriz.",
 	"apierror-parsoid-batch-batchtoolarge": "Batch demasiado longo, o límite é de 500.",
 	"apierror-parsoid-batch-invalidaction": "Acción incorrecta no elemento de índice $1.",
