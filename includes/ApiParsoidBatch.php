@@ -417,7 +417,7 @@ class ApiParsoidBatch extends ApiBase {
 
 		// This part is similar to Linker::makeImageLink(). If there is no width,
 		// set one based on the source file size.
-		$page = isset( $hp['page'] ) ? $hp['page'] : false;
+		$page = isset( $hp['page'] ) ? $hp['page'] : 1;
 		if ( !isset( $hp['width'] ) ) {
 			if ( isset( $hp['height'] ) && $file->isVectorized() ) {
 				// If it's a vector image, and user only specifies height
