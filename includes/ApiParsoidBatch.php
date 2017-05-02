@@ -3,6 +3,17 @@
 use IPSet\IPSet;
 
 class ApiParsoidBatch extends ApiBase {
+
+	private $mPageSet;
+
+	private function getPageSet() {
+		if ( !isset( $this->mPageSet ) ) {
+			$this->mPageSet = new ApiPageSet( $this );
+		}
+
+		return $this->mPageSet;
+	}
+
 	public function execute() {
 		$params = $this->extractRequestParams();
 
@@ -47,6 +58,15 @@ class ApiParsoidBatch extends ApiBase {
 				$this->assertScalar( $itemParams, 'text' );
 				$this->assertScalarOrMissing( $itemParams, 'revid' );
 				$size += strlen( $itemParams['text'] );
+			} elseif ( $action === 'pageprops' ) {
+				$this->assertArray( $itemParams, 'titles' );
+				if ( count( $itemParams['titles'] ) > ApiBase::LIMIT_BIG1 ) {
+					if ( is_callable( array( $this, 'dieWithError' ) ) ) {
+						$this->dieWithError( [ 'apiwarn-toomanyvalues', 'titles', ApiBase::LIMIT_BIG1 ] );
+					} else {
+						$this->dieUsage( "Too many titles", 'too-many-titles' );
+					}
+				}
 			} elseif ( $action === 'imageinfo' ) {
 				$this->assertScalar( $itemParams, 'filename' );
 				if ( isset( $itemParams['txopts'] ) ) {
@@ -119,6 +139,8 @@ class ApiParsoidBatch extends ApiBase {
 				$txopts = isset( $itemParams['txopts'] ) ? $itemParams['txopts'] : array();
 				$page = isset( $itemParams['page'] ) ? Title::newFromText( $itemParams['page'] ) : null;
 				$itemResult = $this->imageinfo( $filename, $file, $txopts, $page );
+			} elseif ( $action === 'pageprops' ) {
+				$itemResult = $this->pageprops( $itemParams['titles'] );
 			} else {
 				throw new Exception( "Invalid action despite validation already being done" );
 			}
@@ -258,6 +280,59 @@ class ApiParsoidBatch extends ApiBase {
 			);
 		}
 		return $result;
+	}
+
+	protected function pageprops( array $titles ) {
+		$pageSet = $this->getPageSet();
+		$pageSet->populateFromTitles( $titles );
+
+		$pages = [];
+
+		// This is pretty much copied from ApiQuery::outputGeneralPageInfo(),
+		// except for adding page properties and redirect to good titles.
+
+		foreach ( $pageSet->getMissingTitles() as $fakeId => $title ) {
+			$vals = [];
+			ApiQueryBase::addTitleInfo( $vals, $title );
+			$vals['missing'] = true;
+			if ( $title->isKnown() ) {
+				$vals['known'] = true;
+			}
+			$pages[$fakeId] = $vals;
+		}
+
+		foreach ( $pageSet->getInvalidTitlesAndReasons() as $fakeId => $data ) {
+			$pages[$fakeId] = $data + [ 'invalid' => true ];
+		}
+
+		foreach ( $pageSet->getSpecialTitles() as $fakeId => $title ) {
+			$vals = [];
+			ApiQueryBase::addTitleInfo( $vals, $title );
+			$vals['special'] = true;
+			if ( !$title->isKnown() ) {
+				$vals['missing'] = true;
+			}
+			$pages[$fakeId] = $vals;
+		}
+
+		$pageProps = PageProps::getInstance();
+		$goodTitles = $pageSet->getGoodTitles();
+		$props = $pageProps->getProperties( $goodTitles, 'disambiguation' );
+
+		foreach ( $goodTitles as $pageid => $title ) {
+			$vals = [];
+			$vals['pageid'] = $pageid;
+			ApiQueryBase::addTitleInfo( $vals, $title );
+			if ( isset( $props[$pageid] ) ) {
+				$vals['pageprops'] = $props[$pageid];
+			}
+			if ( $title->isRedirect() ) {
+				$vals['redirect'] = "";
+			}
+			$pages[$pageid] = $vals;
+		}
+
+		return $pages;
 	}
 
 	/**
