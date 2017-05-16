@@ -223,7 +223,9 @@ class ApiParsoidBatch extends ApiBase {
 		$contentHandler = ContentHandler::getForModelID( CONTENT_MODEL_WIKITEXT );
 		$options = $contentHandler->makeParserOptions( $this->getContext() );
 		$options->enableLimitReport( false );
-		$options->setWrapOutputClass( false ); // Parsoid doesn't want the output wrapper
+		if ( is_callable( [ $options, 'setWrapOutputClass' ] ) ) {
+			$options->setWrapOutputClass( false ); // Parsoid doesn't want the output wrapper
+		}
 		$out = $wgParser->parse( $text, $title, $options );
 		return array(
 			'text' => $out->getText(),
