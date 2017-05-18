@@ -21,7 +21,7 @@ class ApiParsoidBatch extends ApiBase {
 		$config = $context->getConfig();
 		$ipset = new IPSet( $config->get( 'ParsoidBatchAPI_AllowedIPs' ) );
 		if ( !$ipset->match( $context->getRequest()->getIP() ) ) {
-			if ( is_callable( array( $this, 'dieWithError' ) ) ) {
+			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
 				$this->dieWithError( 'apierror-parsoid-batch-notallowed', 'not_allowed' );
 			} else {
 				$this->dieUsage( "Client IP address not in ParsoidBatchAPI_AllowedIPs",
@@ -32,14 +32,14 @@ class ApiParsoidBatch extends ApiBase {
 		// Parameter validation
 		$batch = json_decode( $params['batch'], true );
 		if ( !is_array( $batch ) ) {
-			if ( is_callable( array( $this, 'dieWithError' ) ) ) {
+			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
 				$this->dieWithError( 'apierror-parsoid-batch-invalidbatch', 'invalid_batch' );
 			} else {
 				$this->dieUsage( "Invalid batch, must be array", 'invalid_batch' );
 			}
 		}
 		if ( count( $batch ) > 500 ) {
-			if ( is_callable( array( $this, 'dieWithError' ) ) ) {
+			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
 				$this->dieWithError( 'apierror-parsoid-batch-batchtoolarge', 'batch_too_large' );
 			} else {
 				$this->dieUsage( "Batch too large, limit is 500", 'batch_too_large' );
@@ -49,7 +49,7 @@ class ApiParsoidBatch extends ApiBase {
 		wfIncrStats( 'ParsoidBatchAPI.items', count( $batch ) );
 
 		$size = 0;
-		$filenames = array();
+		$filenames = [];
 		foreach ( $batch as $itemIndex => $itemParams ) {
 			$action = $itemParams['action'];
 			$this->assertScalar( $itemParams, 'action' );
@@ -61,7 +61,7 @@ class ApiParsoidBatch extends ApiBase {
 			} elseif ( $action === 'pageprops' ) {
 				$this->assertArray( $itemParams, 'titles' );
 				if ( count( $itemParams['titles'] ) > ApiBase::LIMIT_BIG1 ) {
-					if ( is_callable( array( $this, 'dieWithError' ) ) ) {
+					if ( is_callable( [ $this, 'dieWithError' ] ) ) {
 						$this->dieWithError( [ 'apiwarn-toomanyvalues', 'titles', ApiBase::LIMIT_BIG1 ] );
 					} else {
 						$this->dieUsage( "Too many titles", 'too-many-titles' );
@@ -84,7 +84,7 @@ class ApiParsoidBatch extends ApiBase {
 					$filenames[] = $batch[$itemIndex]['filename'] = $title->getDBkey();
 				}
 			} else {
-				if ( is_callable( array( $this, 'dieWithError' ) ) ) {
+				if ( is_callable( [ $this, 'dieWithError' ] ) ) {
 					$this->dieWithError(
 						[ 'apierror-parsoid-batch-invalidaction', wfEscapeWikiText( $itemIndex ) ], 'invalid_action'
 					);
@@ -94,7 +94,7 @@ class ApiParsoidBatch extends ApiBase {
 			}
 		}
 		if ( $size > 1024 * $config->get( 'MaxArticleSize' ) ) {
-			if ( is_callable( array( $this, 'dieWithError' ) ) ) {
+			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
 				$this->dieWithError( 'apierror-parsoid-batch-texttoobig', 'text_too_big' );
 			} else {
 				$this->dieUsage( "Input text exceeds maximum article size", 'text_too_big' );
@@ -105,17 +105,17 @@ class ApiParsoidBatch extends ApiBase {
 		if ( count( $filenames ) ) {
 			$files = RepoGroup::singleton()->findFiles( $filenames );
 		} else {
-			$files = array();
+			$files = [];
 		}
 
-		$batchResult = array();
+		$batchResult = [];
 		$result = $this->getResult();
 		foreach ( $batch as $itemIndex => $itemParams ) {
 			$action = $itemParams['action'];
 			if ( $action === 'parse' || $action === 'preprocess' ) {
 				$title = Title::newFromText( $itemParams['title'] );
 				if ( !$title ) {
-					if ( is_callable( array( $this, 'dieWithError' ) ) ) {
+					if ( is_callable( [ $this, 'dieWithError' ] ) ) {
 						$this->dieWithError(
 							[ 'apierror-parsoid-batch-invalidtitle', wfEscapeWikiText( $itemIndex ) ], 'invalid_title'
 						);
@@ -136,7 +136,7 @@ class ApiParsoidBatch extends ApiBase {
 			} elseif ( $action === 'imageinfo' ) {
 				$filename = $itemParams['filename'];
 				$file = isset( $files[$filename] ) ? $files[$filename] : null;
-				$txopts = isset( $itemParams['txopts'] ) ? $itemParams['txopts'] : array();
+				$txopts = isset( $itemParams['txopts'] ) ? $itemParams['txopts'] : [];
 				$page = isset( $itemParams['page'] ) ? Title::newFromText( $itemParams['page'] ) : null;
 				$itemResult = $this->imageinfo( $filename, $file, $txopts, $page );
 			} elseif ( $action === 'pageprops' ) {
@@ -155,9 +155,9 @@ class ApiParsoidBatch extends ApiBase {
 
 	protected function assertScalar( array $array, $key ) {
 		if ( !isset( $array[$key] ) ) {
-			if ( is_callable( array( $this, 'dieWithError' ) ) ) {
+			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
 				$eKey = wfEscapeWikiText( $key ); // Might be user-supplied via txopts
-				$this->dieWithError( array( 'apierror-missingparam', $eKey ), "missing_$eKey" );
+				$this->dieWithError( [ 'apierror-missingparam', $eKey ], "missing_$eKey" );
 			} else {
 				$this->dieUsage(
 					"The $key parameter is required",
@@ -165,9 +165,9 @@ class ApiParsoidBatch extends ApiBase {
 			}
 		}
 		if ( !is_scalar( $array[$key] ) ) {
-			if ( is_callable( array( $this, 'dieWithError' ) ) ) {
+			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
 				$eKey = wfEscapeWikiText( $key ); // Might be user-supplied via txopts
-				$this->dieWithError( array( 'apierror-parsoid-batch-mustbescalar', $eKey ), "invalid_$eKey" );
+				$this->dieWithError( [ 'apierror-parsoid-batch-mustbescalar', $eKey ], "invalid_$eKey" );
 			} else {
 				$this->dieUsage(
 					"The $key parameter must be a scalar",
@@ -178,8 +178,8 @@ class ApiParsoidBatch extends ApiBase {
 
 	protected function assertScalarOrMissing( array $array, $key ) {
 		if ( isset( $array[$key] ) && !is_scalar( $array[$key] ) ) {
-			if ( is_callable( array( $this, 'dieWithError' ) ) ) {
-				$this->dieWithError( array( 'apierror-parsoid-batch-mustbescalar', $key ), "invalid_$key" );
+			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
+				$this->dieWithError( [ 'apierror-parsoid-batch-mustbescalar', $key ], "invalid_$key" );
 			} else {
 				$this->dieUsage(
 					"The $key parameter must be a scalar",
@@ -190,8 +190,8 @@ class ApiParsoidBatch extends ApiBase {
 
 	protected function assertArray( array $array, $key ) {
 		if ( !isset( $array[$key] ) ) {
-			if ( is_callable( array( $this, 'dieWithError' ) ) ) {
-				$this->dieWithError( array( 'apierror-missingparam', $key ), "missing_$key" );
+			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
+				$this->dieWithError( [ 'apierror-missingparam', $key ], "missing_$key" );
 			} else {
 				$this->dieUsage(
 					"The $key parameter is required",
@@ -199,8 +199,8 @@ class ApiParsoidBatch extends ApiBase {
 			}
 		}
 		if ( !is_array( $array[$key] ) ) {
-			if ( is_callable( array( $this, 'dieWithError' ) ) ) {
-				$this->dieWithError( array( 'apierror-parsoid-batch-mustbearray', $key ), "invalid_$key" );
+			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
+				$this->dieWithError( [ 'apierror-parsoid-batch-mustbearray', $key ], "invalid_$key" );
 			} else {
 				$this->dieUsage(
 					"The $key parameter must be an array",
@@ -227,13 +227,13 @@ class ApiParsoidBatch extends ApiBase {
 			$options->setWrapOutputClass( false ); // Parsoid doesn't want the output wrapper
 		}
 		$out = $wgParser->parse( $text, $title, $options );
-		return array(
+		return [
 			'text' => $out->getText(),
 			'modules' => array_values( array_unique( $out->getModules() ) ),
 			'modulescripts' => array_values( array_unique( $out->getModuleScripts() ) ),
 			'modulestyles' => array_values( array_unique( $out->getModuleStyles() ) ),
 			'categories' => $this->formatCategoryLinks( $out->getCategories() ),
-		);
+		];
 	}
 
 	/**
@@ -252,34 +252,34 @@ class ApiParsoidBatch extends ApiBase {
 		$options = $contentHandler->makeParserOptions( $this->getContext() );
 		$wikitext = $wgParser->preprocess( $text, $title, $options, $revid );
 		$out = $wgParser->getOutput();
-		return array(
+		return [
 			'wikitext' => $wikitext,
 			'categories' => $this->formatCategoryLinks( $out->getCategories() ),
 			'properties' => $this->formatProperties( $out->getProperties() ),
 			'modules' => array_values( array_unique( $out->getModules() ) ),
 			'modulescripts' => array_values( array_unique( $out->getModuleScripts() ) ),
 			'modulestyles' => array_values( array_unique( $out->getModuleStyles() ) ),
-		);
+		];
 	}
 
 	protected function formatCategoryLinks( array $links ) {
-		$result = array();
+		$result = [];
 		foreach ( $links as $link => $sortkey ) {
-			$result[] = array(
+			$result[] = [
 				'*' => $link,
 				'sortkey' => $sortkey
-			);
+			];
 		}
 		return $result;
 	}
 
 	protected function formatProperties( array $props ) {
-		$result = array();
+		$result = [];
 		foreach ( $props as $name => $value ) {
-			$result[] = array(
+			$result[] = [
 				'*' => $value,
 				'name' => $name
-			);
+			];
 		}
 		return $result;
 	}
@@ -350,7 +350,7 @@ class ApiParsoidBatch extends ApiBase {
 			// Short return code for missing images
 			return null;
 		}
-		$result = array(
+		$result = [
 			'width' => $file->getWidth(),
 			'height' => $file->getHeight(),
 			'size' => $file->getSize(),
@@ -359,7 +359,7 @@ class ApiParsoidBatch extends ApiBase {
 			'url' => wfExpandUrl( $file->getFullUrl(), PROTO_CURRENT ),
 			'mustRender' => $file->mustRender(),
 			'badFile' => wfIsBadImage( $filename, $page ?: false ),
-		);
+		];
 		$length = $file->getLength();
 		if ( $length ) {
 			$result['duration'] = (float)$length;
@@ -374,7 +374,7 @@ class ApiParsoidBatch extends ApiBase {
 					// Do srcset scaling
 					Linker::processResponsiveImages( $file, $mto, $txopts );
 					if ( count( $mto->responsiveUrls ) ) {
-						$result['responsiveUrls'] = array();
+						$result['responsiveUrls'] = [];
 						foreach ( $mto->responsiveUrls as $density => $url ) {
 							$result['responsiveUrls'][$density] = wfExpandUrl(
 								$url, PROTO_CURRENT );
@@ -383,7 +383,7 @@ class ApiParsoidBatch extends ApiBase {
 				}
 
 				// Proposed MediaTransformOutput serialization method for T51896 etc.
-				if ( is_callable( array( $mto, 'getAPIData' ) ) ) {
+				if ( is_callable( [ $mto, 'getAPIData' ] ) ) {
 					$result['thumbdata'] = $mto->getAPIData();
 				}
 
@@ -407,7 +407,7 @@ class ApiParsoidBatch extends ApiBase {
 		// Validate the input parameters like Parser::makeImage()
 		$handler = $file->getHandler();
 		if ( !$handler ) {
-			return array(); // will get iconThumb()
+			return []; // will get iconThumb()
 		}
 		foreach ( $hp as $name => $value ) {
 			if ( !$handler->validateParam( $name, $value ) ) {
@@ -441,11 +441,11 @@ class ApiParsoidBatch extends ApiBase {
 	}
 
 	public function getAllowedParams() {
-		return array(
-			'batch' => array(
+		return [
+			'batch' => [
 				ApiBase::PARAM_TYPE => 'string',
 				ApiBase::PARAM_REQUIRED => true,
-			)
-		);
+			]
+		];
 	}
 }
