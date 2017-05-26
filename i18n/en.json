@@ -6,6 +6,7 @@
 	},
 	"parsoidbatchapi-desc": "Batch API for Parsoid",
 	"apihelp-parsoid-batch-description": "",
+	"apihelp-parsoid-batch-summary": "",
 	"apihelp-parsoid-batch-param-batch": "",
 	"apierror-parsoid-batch-notallowed": "Client IP address not in ParsoidBatchAPI_AllowedIPs.",
 	"apierror-parsoid-batch-invalidbatch": "Invalid batch, must be array.",
