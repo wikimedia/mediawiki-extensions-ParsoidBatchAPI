@@ -8,4 +8,3 @@ if ( function_exists( 'wfLoadExtension' ) ) {
 } else {
 	die( 'This version of the ParsoidBatchAPI extension requires MediaWiki 1.25+' );
 }
-
