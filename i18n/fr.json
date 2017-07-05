@@ -3,10 +3,13 @@
 		"authors": [
 			"Momo50WM",
 			"Derugon",
-			"Wladek92"
+			"Wladek92",
+			"Gomoko"
 		]
 	},
 	"parsoidbatchapi-desc": "Lot d'API pour Parsoid",
+	"apihelp-parsoid-batch-description": "API de regroupement (pour Parsoid) pour exécuter par lot les requêtes API de MédiaWiki",
+	"apihelp-parsoid-batch-summary": "API de regroupement pour Parsoid",
 	"apihelp-parsoid-batch-param-batch": "Requêtes de l'API Action (maximum 500 par recherche).",
 	"apierror-parsoid-batch-notallowed": "L'adresse IP du client ne figure pas dans ParsoidBatchAPI_AllowedIPs.",
 	"apierror-parsoid-batch-invalidbatch": "Batch invalide, doit être un tableau.",
