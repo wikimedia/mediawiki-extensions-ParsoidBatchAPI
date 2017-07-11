@@ -5,6 +5,9 @@
 		]
 	},
 	"parsoidbatchapi-desc": "API de trabayu por llotes pa Parsoid",
+	"apihelp-parsoid-batch-description": "API de trabayos por llotes (pa Parsoid) pa facer solicitúes en masa a la API de MediaWiki",
+	"apihelp-parsoid-batch-summary": "API de trabayu por llotes pa Parsoid",
+	"apihelp-parsoid-batch-param-batch": "Solicitúes a la API d'Aición (máx 500 per resultancia).",
 	"apierror-parsoid-batch-notallowed": "La direición IP del cliente nun ta en ParsoidBatchAPI_AllowedIPs.",
 	"apierror-parsoid-batch-invalidbatch": "Batch inválidu, tien de ser una matriz.",
 	"apierror-parsoid-batch-batchtoolarge": "Batch enforma grande, la llende ye de 500.",
