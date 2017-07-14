@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"!Silent"
+			"!Silent",
+			"Felipe L. Ewald"
 		]
 	},
-	"parsoidbatchapi-desc": "API Batch para o Parsoid"
+	"parsoidbatchapi-desc": "API Batch para o Parsoid",
+	"apihelp-parsoid-batch-summary": "API Batch para o Parsoid"
 }
