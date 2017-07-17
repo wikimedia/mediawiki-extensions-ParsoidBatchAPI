@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Mikel Ibaiba"
+		]
+	},
+	"apierror-parsoid-batch-texttoobig": "Testuaren luzeera orrialde batekoa baino gehiagokoa da."
+}
