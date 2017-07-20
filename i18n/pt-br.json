@@ -6,5 +6,6 @@
 		]
 	},
 	"parsoidbatchapi-desc": "API Batch para o Parsoid",
-	"apihelp-parsoid-batch-summary": "API Batch para o Parsoid"
+	"apihelp-parsoid-batch-summary": "API Batch para o Parsoid",
+	"apierror-parsoid-batch-invalidtitle": "Título inválido ($1)."
 }
