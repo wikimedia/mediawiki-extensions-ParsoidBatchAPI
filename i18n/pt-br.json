@@ -7,5 +7,10 @@
 	},
 	"parsoidbatchapi-desc": "API Batch para o Parsoid",
 	"apihelp-parsoid-batch-summary": "API Batch para o Parsoid",
-	"apierror-parsoid-batch-invalidtitle": "Título inválido ($1)."
+	"apierror-parsoid-batch-invalidbatch": "Lote inválido, deve ser matriz.",
+	"apierror-parsoid-batch-batchtoolarge": "Lote muito grande, o limite é de 500.",
+	"apierror-parsoid-batch-invalidaction": "Ação inválida no índice de item $1",
+	"apierror-parsoid-batch-invalidtitle": "Título inválido ($1).",
+	"apierror-parsoid-batch-mustbescalar": "O parâmetro <var>$1</var> deve ser um escalar.",
+	"apierror-parsoid-batch-mustbearray": "O parâmetro <var>$1</var> deve ser uma matriz."
 }
