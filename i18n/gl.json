@@ -6,6 +6,7 @@
 		]
 	},
 	"parsoidbatchapi-desc": "API de traballo por lotes para Parsoid",
+	"apihelp-parsoid-batch-param-batch": "Petións da API Action (máximo 500 por consulta).",
 	"apierror-parsoid-batch-notallowed": "A dirección IP do cliente non figura en ParsoidBatchAPI_AllowedIPs.",
 	"apierror-parsoid-batch-invalidbatch": "Batch incorrecto, debe ser unha matriz.",
 	"apierror-parsoid-batch-batchtoolarge": "Batch demasiado longo, o límite é de 500.",
