@@ -123,11 +123,28 @@ class ApiParsoidBatch extends ApiBase {
 						$this->dieUsage( "Invalid title ($itemIndex)", 'invalid_title' );
 					}
 				}
+				$revid = null;
+				if ( isset( $itemParams['revid'] ) ) {
+					$revid = intval( $itemParams['revid'] );
+					$rev = Revision::newFromId( $revid );
+					if ( !$rev ) {
+						if ( is_callable( [ $this, 'dieWithError' ] ) ) {
+							$this->dieWithError( [ 'apierror-nosuchrevid', $revid ] );
+						} else {
+							$this->dieUsage( "There is no revision ID $revid", 'missingrev' );
+						}
+					}
+					$pTitle = $title;
+					$title = $rev->getTitle();
+					if ( !$title->equals( $pTitle ) ) {
+						$this->addWarning( [ 'apierror-revwrongpage', $rev->getId(),
+							wfEscapeWikiText( $pTitle->getPrefixedText() ) ] );
+					}
+				}
 				$text = $itemParams['text'];
-				$revid = isset( $itemParams['revid'] ) ? intval( $itemParams['revid'] ) : false;
 				switch ( $action ) {
 					case 'parse':
-						$itemResult = $this->parse( $text, $title );
+						$itemResult = $this->parse( $text, $title, $revid );
 						break;
 					case 'preprocess':
 						$itemResult = $this->preprocess( $text, $title, $revid );
@@ -212,12 +229,13 @@ class ApiParsoidBatch extends ApiBase {
 	/**
 	 * @param string $text
 	 * @param Title $title
+	 * @param int|null $revid
 	 *
 	 * @return array
 	 * @throws MWException
 	 * @throws MWUnknownContentModelException
 	 */
-	protected function parse( $text, Title $title ) {
+	protected function parse( $text, Title $title, $revid ) {
 		global $wgParser;
 
 		$contentHandler = ContentHandler::getForModelID( CONTENT_MODEL_WIKITEXT );
@@ -226,7 +244,7 @@ class ApiParsoidBatch extends ApiBase {
 		if ( is_callable( [ $options, 'setWrapOutputClass' ] ) ) {
 			$options->setWrapOutputClass( false ); // Parsoid doesn't want the output wrapper
 		}
-		$out = $wgParser->parse( $text, $title, $options );
+		$out = $wgParser->parse( $text, $title, $options, true, true, $revid );
 		return [
 			'text' => $out->getText(),
 			'modules' => array_values( array_unique( $out->getModules() ) ),
@@ -239,7 +257,7 @@ class ApiParsoidBatch extends ApiBase {
 	/**
 	 * @param string $text
 	 * @param Title $title
-	 * @param int|bool $revid
+	 * @param int|null $revid
 	 *
 	 * @return array
 	 * @throws MWException
