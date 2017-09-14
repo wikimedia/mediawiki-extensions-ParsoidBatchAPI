@@ -4,5 +4,7 @@
 			"Joetaras"
 		]
 	},
-	"parsoidbatchapi-desc": "API Batch pe Parsoid"
+	"parsoidbatchapi-desc": "API Batch pe Parsoid",
+	"apierror-parsoid-batch-invalidtitle": "Titole invalide: ($1).",
+	"apierror-parsoid-batch-mustbescalar": "'U parametre <var>$1</var> adda essere 'nu scalare."
 }
