@@ -5,6 +5,9 @@
 		]
 	},
 	"parsoidbatchapi-desc": "Пакетний API для Parsoid",
+	"apihelp-parsoid-batch-description": "Пакетний API (для Parsoid) для здійснення пакетних запитів MediaWiki API",
+	"apihelp-parsoid-batch-summary": "Пакетний API для Parsoid",
+	"apihelp-parsoid-batch-param-batch": "Запити Action API (макс. 500 на збіг).",
 	"apierror-parsoid-batch-notallowed": "IP-адреси клієнта немає в ParsoidBatchAPI_AllowedIPs.",
 	"apierror-parsoid-batch-invalidbatch": "Недійсний пакет, повинен бути масив.",
 	"apierror-parsoid-batch-batchtoolarge": "Пакет надто великий, ліміт становить 500.",
