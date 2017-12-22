@@ -241,12 +241,14 @@ class ApiParsoidBatch extends ApiBase {
 		$contentHandler = ContentHandler::getForModelID( CONTENT_MODEL_WIKITEXT );
 		$options = $contentHandler->makeParserOptions( $this->getContext() );
 		$options->enableLimitReport( false );
-		if ( is_callable( [ $options, 'setWrapOutputClass' ] ) ) {
+		if ( is_callable( [ $options, 'setWrapOutputClass' ] ) &&
+			!defined( 'ParserOutput::SUPPORTS_UNWRAP_TRANSFORM' )
+		) {
 			$options->setWrapOutputClass( false ); // Parsoid doesn't want the output wrapper
 		}
 		$out = $wgParser->parse( $text, $title, $options, true, true, $revid );
 		return [
-			'text' => $out->getText(),
+			'text' => $out->getText( [ 'unwrap' => true ] ),
 			'modules' => array_values( array_unique( $out->getModules() ) ),
 			'modulescripts' => array_values( array_unique( $out->getModuleScripts() ) ),
 			'modulestyles' => array_values( array_unique( $out->getModuleStyles() ) ),
