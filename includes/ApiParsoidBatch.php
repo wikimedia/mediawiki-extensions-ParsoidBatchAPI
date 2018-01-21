@@ -1,6 +1,6 @@
 <?php
 
-use IPSet\IPSet;
+use Wikimedia\IPSet;
 
 class ApiParsoidBatch extends ApiBase {
 
