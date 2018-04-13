@@ -5,6 +5,7 @@
 	"url": "https://www.mediawiki.org/wiki/Extension:ParsoidBatchAPI",
 	"descriptionmsg": "parsoidbatchapi-desc",
 	"license-name": "CC0-1.0",
+	"type": "api",
 	"manifest_version": 1,
 	"APIModules": {
 		"parsoid-batch": {
