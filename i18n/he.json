@@ -1,10 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
-			"Amire80"
+			"Amire80",
+			"Guycn2"
 		]
 	},
 	"parsoidbatchapi-desc": "API אצווה לפרסואיד",
+	"apihelp-parsoid-batch-description": "אצוות API (עבור פרסואיד) לצורך ביצוע בקשות API מרובות במדיה־ויקי",
+	"apihelp-parsoid-batch-summary": "אצוות API לפרסואיד",
+	"apihelp-parsoid-batch-param-batch": "בקשות פעולה של API (עד 500 לכל התאמה).",
 	"apierror-parsoid-batch-notallowed": "כתובת ה־IP של הלקוח אינה נמצאת ב־ParsoidBatchAPI_AllowedIPs.",
 	"apierror-parsoid-batch-invalidbatch": "אצווה בלתי־תקינה, זה צריך להיות מערך.",
 	"apierror-parsoid-batch-batchtoolarge": "אצווה גדולה מדי, המגבלה היא 500.",
