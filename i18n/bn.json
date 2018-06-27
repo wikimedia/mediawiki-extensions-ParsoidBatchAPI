@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Aftabuzzaman"
+			"Aftabuzzaman",
+			"আফতাবুজ্জামান"
 		]
 	},
 	"apierror-parsoid-batch-invalidtitle": "অবৈধ শিরোনাম ($1)।"
