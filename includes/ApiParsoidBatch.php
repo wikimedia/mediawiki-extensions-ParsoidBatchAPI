@@ -238,8 +238,12 @@ class ApiParsoidBatch extends ApiBase {
 	protected function parse( $text, Title $title, $revid ) {
 		global $wgParser;
 
-		$contentHandler = ContentHandler::getForModelID( CONTENT_MODEL_WIKITEXT );
-		$options = $contentHandler->makeParserOptions( $this->getContext() );
+		if ( defined( 'ParserOptions::HAS_NEWCANONICAL_FROM_CONTEXT' ) ) {
+			$options = ParserOptions::newCanonical( $this->getContext() );
+		} else {
+			$contentHandler = ContentHandler::getForModelID( CONTENT_MODEL_WIKITEXT );
+			$options = $contentHandler->makeParserOptions( $this->getContext() );
+		}
 		$options->enableLimitReport( false );
 		if ( is_callable( [ $options, 'setWrapOutputClass' ] ) &&
 			!defined( 'ParserOutput::SUPPORTS_UNWRAP_TRANSFORM' )
@@ -268,8 +272,12 @@ class ApiParsoidBatch extends ApiBase {
 	protected function preprocess( $text, Title $title, $revid ) {
 		global $wgParser;
 
-		$contentHandler = ContentHandler::getForModelID( CONTENT_MODEL_WIKITEXT );
-		$options = $contentHandler->makeParserOptions( $this->getContext() );
+		if ( defined( 'ParserOptions::HAS_NEWCANONICAL_FROM_CONTEXT' ) ) {
+			$options = ParserOptions::newCanonical( $this->getContext() );
+		} else {
+			$contentHandler = ContentHandler::getForModelID( CONTENT_MODEL_WIKITEXT );
+			$options = $contentHandler->makeParserOptions( $this->getContext() );
+		}
 		$wikitext = $wgParser->preprocess( $text, $title, $options, $revid );
 		$out = $wgParser->getOutput();
 		return [
