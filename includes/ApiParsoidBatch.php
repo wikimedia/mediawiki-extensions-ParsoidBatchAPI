@@ -21,29 +21,16 @@ class ApiParsoidBatch extends ApiBase {
 		$config = $context->getConfig();
 		$ipset = new IPSet( $config->get( 'ParsoidBatchAPI_AllowedIPs' ) );
 		if ( !$ipset->match( $context->getRequest()->getIP() ) ) {
-			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
-				$this->dieWithError( 'apierror-parsoid-batch-notallowed', 'not_allowed' );
-			} else {
-				$this->dieUsage( "Client IP address not in ParsoidBatchAPI_AllowedIPs",
-					'not_allowed' );
-			}
+			$this->dieWithError( 'apierror-parsoid-batch-notallowed', 'not_allowed' );
 		}
 
 		// Parameter validation
 		$batch = json_decode( $params['batch'], true );
 		if ( !is_array( $batch ) ) {
-			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
-				$this->dieWithError( 'apierror-parsoid-batch-invalidbatch', 'invalid_batch' );
-			} else {
-				$this->dieUsage( "Invalid batch, must be array", 'invalid_batch' );
-			}
+			$this->dieWithError( 'apierror-parsoid-batch-invalidbatch', 'invalid_batch' );
 		}
 		if ( count( $batch ) > 500 ) {
-			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
-				$this->dieWithError( 'apierror-parsoid-batch-batchtoolarge', 'batch_too_large' );
-			} else {
-				$this->dieUsage( "Batch too large, limit is 500", 'batch_too_large' );
-			}
+			$this->dieWithError( 'apierror-parsoid-batch-batchtoolarge', 'batch_too_large' );
 		}
 		wfIncrStats( 'ParsoidBatchAPI.batches' );
 		wfIncrStats( 'ParsoidBatchAPI.items', count( $batch ) );
@@ -61,11 +48,7 @@ class ApiParsoidBatch extends ApiBase {
 			} elseif ( $action === 'pageprops' ) {
 				$this->assertArray( $itemParams, 'titles' );
 				if ( count( $itemParams['titles'] ) > ApiBase::LIMIT_BIG1 ) {
-					if ( is_callable( [ $this, 'dieWithError' ] ) ) {
-						$this->dieWithError( [ 'apiwarn-toomanyvalues', 'titles', ApiBase::LIMIT_BIG1 ] );
-					} else {
-						$this->dieUsage( "Too many titles", 'too-many-titles' );
-					}
+					$this->dieWithError( [ 'apiwarn-toomanyvalues', 'titles', ApiBase::LIMIT_BIG1 ] );
 				}
 			} elseif ( $action === 'imageinfo' ) {
 				$this->assertScalar( $itemParams, 'filename' );
@@ -84,21 +67,13 @@ class ApiParsoidBatch extends ApiBase {
 					$filenames[] = $batch[$itemIndex]['filename'] = $title->getDBkey();
 				}
 			} else {
-				if ( is_callable( [ $this, 'dieWithError' ] ) ) {
-					$this->dieWithError(
-						[ 'apierror-parsoid-batch-invalidaction', wfEscapeWikiText( $itemIndex ) ], 'invalid_action'
-					);
-				} else {
-					$this->dieUsage( "Invalid action in item index $itemIndex", 'invalid_action' );
-				}
+				$this->dieWithError(
+					[ 'apierror-parsoid-batch-invalidaction', wfEscapeWikiText( $itemIndex ) ], 'invalid_action'
+				);
 			}
 		}
 		if ( $size > 1024 * $config->get( 'MaxArticleSize' ) ) {
-			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
-				$this->dieWithError( 'apierror-parsoid-batch-texttoobig', 'text_too_big' );
-			} else {
-				$this->dieUsage( "Input text exceeds maximum article size", 'text_too_big' );
-			}
+			$this->dieWithError( 'apierror-parsoid-batch-texttoobig', 'text_too_big' );
 		}
 
 		// Now do the thing
@@ -115,24 +90,16 @@ class ApiParsoidBatch extends ApiBase {
 			if ( $action === 'parse' || $action === 'preprocess' ) {
 				$title = Title::newFromText( $itemParams['title'] );
 				if ( !$title ) {
-					if ( is_callable( [ $this, 'dieWithError' ] ) ) {
-						$this->dieWithError(
-							[ 'apierror-parsoid-batch-invalidtitle', wfEscapeWikiText( $itemIndex ) ], 'invalid_title'
-						);
-					} else {
-						$this->dieUsage( "Invalid title ($itemIndex)", 'invalid_title' );
-					}
+					$this->dieWithError(
+						[ 'apierror-parsoid-batch-invalidtitle', wfEscapeWikiText( $itemIndex ) ], 'invalid_title'
+					);
 				}
 				$revid = null;
 				if ( isset( $itemParams['revid'] ) ) {
 					$revid = intval( $itemParams['revid'] );
 					$rev = Revision::newFromId( $revid );
 					if ( !$rev ) {
-						if ( is_callable( [ $this, 'dieWithError' ] ) ) {
-							$this->dieWithError( [ 'apierror-nosuchrevid', $revid ] );
-						} else {
-							$this->dieUsage( "There is no revision ID $revid", 'missingrev' );
-						}
+						$this->dieWithError( [ 'apierror-nosuchrevid', $revid ] );
 					}
 					$pTitle = $title;
 					$title = $rev->getTitle();
@@ -172,57 +139,27 @@ class ApiParsoidBatch extends ApiBase {
 
 	protected function assertScalar( array $array, $key ) {
 		if ( !isset( $array[$key] ) ) {
-			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
-				$eKey = wfEscapeWikiText( $key ); // Might be user-supplied via txopts
-				$this->dieWithError( [ 'apierror-missingparam', $eKey ], "missing_$eKey" );
-			} else {
-				$this->dieUsage(
-					"The $key parameter is required",
-					"missing_$key" );
-			}
+			$eKey = wfEscapeWikiText( $key ); // Might be user-supplied via txopts
+			$this->dieWithError( [ 'apierror-missingparam', $eKey ], "missing_$eKey" );
 		}
 		if ( !is_scalar( $array[$key] ) ) {
-			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
-				$eKey = wfEscapeWikiText( $key ); // Might be user-supplied via txopts
-				$this->dieWithError( [ 'apierror-parsoid-batch-mustbescalar', $eKey ], "invalid_$eKey" );
-			} else {
-				$this->dieUsage(
-					"The $key parameter must be a scalar",
-					"invalid_$key" );
-			}
+			$eKey = wfEscapeWikiText( $key ); // Might be user-supplied via txopts
+			$this->dieWithError( [ 'apierror-parsoid-batch-mustbescalar', $eKey ], "invalid_$eKey" );
 		}
 	}
 
 	protected function assertScalarOrMissing( array $array, $key ) {
 		if ( isset( $array[$key] ) && !is_scalar( $array[$key] ) ) {
-			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
-				$this->dieWithError( [ 'apierror-parsoid-batch-mustbescalar', $key ], "invalid_$key" );
-			} else {
-				$this->dieUsage(
-					"The $key parameter must be a scalar",
-					"invalid_$key" );
-			}
+			$this->dieWithError( [ 'apierror-parsoid-batch-mustbescalar', $key ], "invalid_$key" );
 		}
 	}
 
 	protected function assertArray( array $array, $key ) {
 		if ( !isset( $array[$key] ) ) {
-			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
-				$this->dieWithError( [ 'apierror-missingparam', $key ], "missing_$key" );
-			} else {
-				$this->dieUsage(
-					"The $key parameter is required",
-					"missing_$key" );
-			}
+			$this->dieWithError( [ 'apierror-missingparam', $key ], "missing_$key" );
 		}
 		if ( !is_array( $array[$key] ) ) {
-			if ( is_callable( [ $this, 'dieWithError' ] ) ) {
-				$this->dieWithError( [ 'apierror-parsoid-batch-mustbearray', $key ], "invalid_$key" );
-			} else {
-				$this->dieUsage(
-					"The $key parameter must be an array",
-					"invalid_$key" );
-			}
+			$this->dieWithError( [ 'apierror-parsoid-batch-mustbearray', $key ], "invalid_$key" );
 		}
 	}
 
@@ -357,7 +294,7 @@ class ApiParsoidBatch extends ApiBase {
 				$vals['pageprops'] = $props[$pageid];
 			}
 			if ( $title->isRedirect() ) {
-				$vals['redirect'] = "";
+				$vals['redirect'] = true;
 			}
 			$pages[$pageid] = $vals;
 		}
