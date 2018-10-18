@@ -15,6 +15,7 @@ class ApiParsoidBatch extends ApiBase {
 	}
 
 	public function execute() {
+		$startTime = microtime( true );
 		$params = $this->extractRequestParams();
 
 		$context = $this->getContext();
@@ -168,6 +169,9 @@ class ApiParsoidBatch extends ApiBase {
 			ApiResult::OVERRIDE |
 			// Don't iterate over the whole array and mangle random bits of it
 			ApiResult::NO_VALIDATE );
+
+		// Send along time to compute the batch
+		$result->addValue( null, 'parsoid-batch-time', microtime( true ) - $startTime );
 	}
 
 	protected function assertScalar( array $array, $key ) {
