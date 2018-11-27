@@ -131,11 +131,8 @@ class ApiParsoidBatch extends ApiBase {
 			}
 			$batchResult[] = $itemResult;
 		}
-		$result->addValue( null, 'parsoid-batch', $batchResult,
-			// No need to merge
-			ApiResult::OVERRIDE |
-			// Don't iterate over the whole array and mangle random bits of it
-			ApiResult::NO_VALIDATE );
+		ApiResult::setIndexedTagName( $batchResult, 'item' );
+		$result->addValue( null, 'parsoid-batch', $batchResult, ApiResult::NO_SIZE_CHECK );
 
 		// Send along time to compute the batch
 		$result->addValue( null, 'parsoid-batch-time', microtime( true ) - $startTime );
@@ -192,13 +189,16 @@ class ApiParsoidBatch extends ApiBase {
 			$options->setWrapOutputClass( false ); // Parsoid doesn't want the output wrapper
 		}
 		$out = $wgParser->parse( $text, $title, $options, true, true, $revid );
-		return [
+		$result = [
 			'text' => $out->getText( [ 'unwrap' => true ] ),
-			'modules' => array_values( array_unique( $out->getModules() ) ),
-			'modulescripts' => array_values( array_unique( $out->getModuleScripts() ) ),
-			'modulestyles' => array_values( array_unique( $out->getModuleStyles() ) ),
+			'modules' => $this->formatModules( $out->getModules() ),
+			'modulescripts' => $this->formatModules( $out->getModuleScripts() ),
+			'modulestyles' => $this->formatModules( $out->getModuleStyles() ),
 			'categories' => $this->formatCategoryLinks( $out->getCategories() ),
+			'properties' => $this->formatProperties( $out->getProperties() ),
 		];
+		$result[ApiResult::META_BC_SUBELEMENTS][] = 'text';
+		return $result;
 	}
 
 	/**
@@ -221,35 +221,39 @@ class ApiParsoidBatch extends ApiBase {
 		}
 		$wikitext = $wgParser->preprocess( $text, $title, $options, $revid );
 		$out = $wgParser->getOutput();
-		return [
+		$result = [
 			'wikitext' => $wikitext,
 			'categories' => $this->formatCategoryLinks( $out->getCategories() ),
 			'properties' => $this->formatProperties( $out->getProperties() ),
-			'modules' => array_values( array_unique( $out->getModules() ) ),
-			'modulescripts' => array_values( array_unique( $out->getModuleScripts() ) ),
-			'modulestyles' => array_values( array_unique( $out->getModuleStyles() ) ),
+			'modules' => $this->formatModules( $out->getModules() ),
+			'modulescripts' => $this->formatModules( $out->getModuleScripts() ),
+			'modulestyles' => $this->formatModules( $out->getModuleStyles() ),
 		];
+		$result[ApiResult::META_BC_SUBELEMENTS][] = 'wikitext';
+		return $result;
+	}
+
+	protected function formatModules( array $modules ) {
+		$result = array_values( array_unique( $modules ) );
+		ApiResult::setIndexedTagName( $result, 'm' );
+		return $result;
 	}
 
 	protected function formatCategoryLinks( array $links ) {
 		$result = [];
 		foreach ( $links as $link => $sortkey ) {
-			$result[] = [
-				'*' => $link,
-				'sortkey' => $sortkey
-			];
+			$entry = [ 'sortkey' => $sortkey ];
+			ApiResult::setContentValue( $entry, 'category', (string)$link );
+			$result[] = $entry;
 		}
+		ApiResult::setIndexedTagName( $result, 'cl' );
 		return $result;
 	}
 
 	protected function formatProperties( array $props ) {
-		$result = [];
-		foreach ( $props as $name => $value ) {
-			$result[] = [
-				'*' => $value,
-				'name' => $name
-			];
-		}
+		$result = (array)$props;
+		ApiResult::setArrayType( $result, 'BCkvp', 'name' );
+		ApiResult::setIndexedTagName( $result, 'pp' );
 		return $result;
 	}
 
@@ -327,7 +331,7 @@ class ApiParsoidBatch extends ApiBase {
 			'mime' => $file->getMimeType(),
 			'url' => wfExpandUrl( $file->getFullUrl(), PROTO_CURRENT ),
 			'mustRender' => $file->mustRender(),
-			'badFile' => wfIsBadImage( $filename, $page ?: false ),
+			'badFile' => (bool)wfIsBadImage( $filename, $page ?: false ),
 		];
 		$length = $file->getLength();
 		if ( $length ) {
