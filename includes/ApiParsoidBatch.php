@@ -131,7 +131,6 @@ class ApiParsoidBatch extends ApiBase {
 			}
 			$batchResult[] = $itemResult;
 		}
-		ApiResult::setIndexedTagName( $batchResult, 'item' );
 		$result->addValue( null, 'parsoid-batch', $batchResult,
 			// No need to merge
 			ApiResult::OVERRIDE |
@@ -193,16 +192,13 @@ class ApiParsoidBatch extends ApiBase {
 			$options->setWrapOutputClass( false ); // Parsoid doesn't want the output wrapper
 		}
 		$out = $wgParser->parse( $text, $title, $options, true, true, $revid );
-		$result = [
+		return [
 			'text' => $out->getText( [ 'unwrap' => true ] ),
-			'modules' => $this->formatModules( $out->getModules() ),
-			'modulescripts' => $this->formatModules( $out->getModuleScripts() ),
-			'modulestyles' => $this->formatModules( $out->getModuleStyles() ),
+			'modules' => array_values( array_unique( $out->getModules() ) ),
+			'modulescripts' => array_values( array_unique( $out->getModuleScripts() ) ),
+			'modulestyles' => array_values( array_unique( $out->getModuleStyles() ) ),
 			'categories' => $this->formatCategoryLinks( $out->getCategories() ),
-			'properties' => $this->formatProperties( $out->getProperties() ),
 		];
-		$result[ApiResult::META_BC_SUBELEMENTS][] = 'text';
-		return $result;
 	}
 
 	/**
@@ -225,39 +221,35 @@ class ApiParsoidBatch extends ApiBase {
 		}
 		$wikitext = $wgParser->preprocess( $text, $title, $options, $revid );
 		$out = $wgParser->getOutput();
-		$result = [
+		return [
 			'wikitext' => $wikitext,
 			'categories' => $this->formatCategoryLinks( $out->getCategories() ),
 			'properties' => $this->formatProperties( $out->getProperties() ),
-			'modules' => $this->formatModules( $out->getModules() ),
-			'modulescripts' => $this->formatModules( $out->getModuleScripts() ),
-			'modulestyles' => $this->formatModules( $out->getModuleStyles() ),
+			'modules' => array_values( array_unique( $out->getModules() ) ),
+			'modulescripts' => array_values( array_unique( $out->getModuleScripts() ) ),
+			'modulestyles' => array_values( array_unique( $out->getModuleStyles() ) ),
 		];
-		$result[ApiResult::META_BC_SUBELEMENTS][] = 'wikitext';
-		return $result;
-	}
-
-	protected function formatModules( array $modules ) {
-		$result = array_values( array_unique( $modules ) );
-		ApiResult::setIndexedTagName( $result, 'm' );
-		return $result;
 	}
 
 	protected function formatCategoryLinks( array $links ) {
 		$result = [];
 		foreach ( $links as $link => $sortkey ) {
-			$entry = [ 'sortkey' => $sortkey ];
-			ApiResult::setContentValue( $entry, 'category', (string)$link );
-			$result[] = $entry;
+			$result[] = [
+				'*' => $link,
+				'sortkey' => $sortkey
+			];
 		}
-		ApiResult::setIndexedTagName( $result, 'cl' );
 		return $result;
 	}
 
 	protected function formatProperties( array $props ) {
-		$result = (array)$props;
-		ApiResult::setArrayType( $result, 'BCkvp', 'name' );
-		ApiResult::setIndexedTagName( $result, 'pp' );
+		$result = [];
+		foreach ( $props as $name => $value ) {
+			$result[] = [
+				'*' => $value,
+				'name' => $name
+			];
+		}
 		return $result;
 	}
 
@@ -335,7 +327,7 @@ class ApiParsoidBatch extends ApiBase {
 			'mime' => $file->getMimeType(),
 			'url' => wfExpandUrl( $file->getFullUrl(), PROTO_CURRENT ),
 			'mustRender' => $file->mustRender(),
-			'badFile' => (bool)wfIsBadImage( $filename, $page ?: false ),
+			'badFile' => wfIsBadImage( $filename, $page ?: false ),
 		];
 		$length = $file->getLength();
 		if ( $length ) {
