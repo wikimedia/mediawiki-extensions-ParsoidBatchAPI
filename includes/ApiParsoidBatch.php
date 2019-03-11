@@ -120,8 +120,8 @@ class ApiParsoidBatch extends ApiBase {
 				}
 			} elseif ( $action === 'imageinfo' ) {
 				$filename = $itemParams['filename'];
-				$file = isset( $files[$filename] ) ? $files[$filename] : null;
-				$txopts = isset( $itemParams['txopts'] ) ? $itemParams['txopts'] : [];
+				$file = $files[$filename] ?? null;
+				$txopts = $itemParams['txopts'] ?? [];
 				$page = isset( $itemParams['page'] ) ? Title::newFromText( $itemParams['page'] ) : null;
 				$itemResult = $this->imageinfo( $filename, $file, $txopts, $page );
 			} elseif ( $action === 'pageprops' ) {
@@ -390,7 +390,7 @@ class ApiParsoidBatch extends ApiBase {
 
 		// This part is similar to Linker::makeImageLink(). If there is no width,
 		// set one based on the source file size.
-		$page = isset( $hp['page'] ) ? $hp['page'] : 1;
+		$page = $hp['page'] ?? 1;
 		if ( !isset( $hp['width'] ) ) {
 			if ( isset( $hp['height'] ) && $file->isVectorized() ) {
 				// If it's a vector image, and user only specifies height
