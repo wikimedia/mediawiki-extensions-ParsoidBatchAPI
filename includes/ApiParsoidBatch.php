@@ -226,7 +226,7 @@ class ApiParsoidBatch extends ApiBase {
 			'categories' => $this->formatCategoryLinks( $out->getCategories() ),
 			'properties' => $this->formatProperties( $out->getProperties() ),
 			'modules' => $this->formatModules( $out->getModules() ),
-			'modulescripts' => $this->formatModules( $out->getModuleScripts() ),
+			'modulescripts' => $this->formatModules( [] ),
 			'modulestyles' => $this->formatModules( $out->getModuleStyles() ),
 		];
 		$result[ApiResult::META_BC_SUBELEMENTS][] = 'wikitext';
