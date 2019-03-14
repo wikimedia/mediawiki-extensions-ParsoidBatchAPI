@@ -192,7 +192,7 @@ class ApiParsoidBatch extends ApiBase {
 		$result = [
 			'text' => $out->getText( [ 'unwrap' => true ] ),
 			'modules' => $this->formatModules( $out->getModules() ),
-			'modulescripts' => $this->formatModules( $out->getModuleScripts() ),
+			'modulescripts' => $this->formatModules( [] ),
 			'modulestyles' => $this->formatModules( $out->getModuleStyles() ),
 			'categories' => $this->formatCategoryLinks( $out->getCategories() ),
 			'properties' => $this->formatProperties( $out->getProperties() ),
