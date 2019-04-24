@@ -341,6 +341,7 @@ class ApiParsoidBatch extends ApiBase {
 		$mto = $file->transform( $txopts );
 		if ( $mto ) {
 			if ( $mto->isError() ) {
+				/** @phan-suppress-next-line PhanUndeclaredMethod */
 				$result['thumberror'] = $mto->toText();
 			} else {
 				if ( $txopts ) {
@@ -357,6 +358,7 @@ class ApiParsoidBatch extends ApiBase {
 
 				// Proposed MediaTransformOutput serialization method for T51896 etc.
 				if ( is_callable( [ $mto, 'getAPIData' ] ) ) {
+					/** @phan-suppress-next-line PhanUndeclaredMethod */
 					$result['thumbdata'] = $mto->getAPIData();
 				}
 
