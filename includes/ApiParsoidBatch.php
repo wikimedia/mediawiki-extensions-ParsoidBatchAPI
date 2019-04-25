@@ -341,7 +341,7 @@ class ApiParsoidBatch extends ApiBase {
 		$mto = $file->transform( $txopts );
 		if ( $mto ) {
 			if ( $mto->isError() ) {
-				/** @phan-suppress-next-line PhanUndeclaredMethod */
+				'@phan-var \MediaTransformError $mto';
 				$result['thumberror'] = $mto->toText();
 			} else {
 				if ( $txopts ) {
