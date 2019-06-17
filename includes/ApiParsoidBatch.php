@@ -292,7 +292,7 @@ class ApiParsoidBatch extends ApiBase {
 
 		$pageProps = PageProps::getInstance();
 		$goodTitles = $pageSet->getGoodTitles();
-		$props = $pageProps->getProperties( $goodTitles, 'disambiguation' );
+		$props = $pageProps->getProperties( $goodTitles, [ 'disambiguation' ] );
 
 		foreach ( $goodTitles as $pageid => $title ) {
 			$vals = [];
