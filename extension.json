@@ -19,7 +19,10 @@
 		"ApiParsoidBatch": "includes/ApiParsoidBatch.php"
 	},
 	"MessagesDirs": {
-		"ParsoidBatchAPI": "i18n"
+		"ParsoidBatchAPI": [
+			"i18n",
+			"i18n/api"
+		]
 	},
 	"config": {
 		"ParsoidBatchAPI_AllowedIPs": [
