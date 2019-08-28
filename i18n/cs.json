@@ -5,6 +5,5 @@
 			"Meliganai"
 		]
 	},
-	"parsoidbatchapi-desc": "Dávkové API pro Parsoid",
-	"apierror-parsoid-batch-texttoobig": "Vložený text přesahuje maximální velikost stránky."
+	"parsoidbatchapi-desc": "Dávkové API pro Parsoid"
 }
