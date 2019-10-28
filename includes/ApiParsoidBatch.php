@@ -1,5 +1,6 @@
 <?php
 
+use MediaWiki\MediaWikiServices;
 use Wikimedia\IPSet;
 
 class ApiParsoidBatch extends ApiBase {
@@ -174,7 +175,7 @@ class ApiParsoidBatch extends ApiBase {
 	 * @throws MWUnknownContentModelException
 	 */
 	protected function parse( $text, Title $title, $revid ) {
-		global $wgParser;
+		$parser = MediaWikiServices::getInstance()->getParser();
 
 		if ( defined( 'ParserOptions::HAS_NEWCANONICAL_FROM_CONTEXT' ) ) {
 			$options = ParserOptions::newCanonical( $this->getContext() );
@@ -188,7 +189,7 @@ class ApiParsoidBatch extends ApiBase {
 		) {
 			$options->setWrapOutputClass( false ); // Parsoid doesn't want the output wrapper
 		}
-		$out = $wgParser->parse( $text, $title, $options, true, true, $revid );
+		$out = $parser->parse( $text, $title, $options, true, true, $revid );
 		$result = [
 			'text' => $out->getText( [ 'unwrap' => true ] ),
 			'modules' => $this->formatModules( $out->getModules() ),
@@ -211,7 +212,7 @@ class ApiParsoidBatch extends ApiBase {
 	 * @throws MWUnknownContentModelException
 	 */
 	protected function preprocess( $text, Title $title, $revid ) {
-		global $wgParser;
+		$parser = MediaWikiServices::getInstance()->getParser();
 
 		if ( defined( 'ParserOptions::HAS_NEWCANONICAL_FROM_CONTEXT' ) ) {
 			$options = ParserOptions::newCanonical( $this->getContext() );
@@ -219,8 +220,8 @@ class ApiParsoidBatch extends ApiBase {
 			$contentHandler = ContentHandler::getForModelID( CONTENT_MODEL_WIKITEXT );
 			$options = $contentHandler->makeParserOptions( $this->getContext() );
 		}
-		$wikitext = $wgParser->preprocess( $text, $title, $options, $revid );
-		$out = $wgParser->getOutput();
+		$wikitext = $parser->preprocess( $text, $title, $options, $revid );
+		$out = $parser->getOutput();
 		$result = [
 			'wikitext' => $wikitext,
 			'categories' => $this->formatCategoryLinks( $out->getCategories() ),
