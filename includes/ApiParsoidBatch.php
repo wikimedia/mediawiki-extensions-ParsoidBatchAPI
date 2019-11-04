@@ -252,7 +252,7 @@ class ApiParsoidBatch extends ApiBase {
 	}
 
 	protected function formatProperties( array $props ) {
-		$result = (array)$props;
+		$result = $props;
 		ApiResult::setArrayType( $result, 'BCkvp', 'name' );
 		ApiResult::setIndexedTagName( $result, 'pp' );
 		return $result;
