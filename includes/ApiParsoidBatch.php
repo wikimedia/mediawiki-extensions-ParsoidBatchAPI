@@ -360,7 +360,7 @@ class ApiParsoidBatch extends ApiBase {
 				// Proposed MediaTransformOutput serialization method for T51896 etc.
 				if ( is_callable( [ $mto, 'getAPIData' ] ) ) {
 					/** @phan-suppress-next-line PhanUndeclaredMethod */
-					$result['thumbdata'] = $mto->getAPIData();
+					$result['thumbdata'] = $mto->getAPIData( [ 'fullurl' ] );
 				}
 
 				$result['thumburl'] = wfExpandUrl( $mto->getUrl(), PROTO_CURRENT );
