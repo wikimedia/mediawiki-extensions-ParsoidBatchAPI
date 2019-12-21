@@ -31,10 +31,12 @@ class ApiParsoidBatch extends ApiBase {
 		if ( !is_array( $batch ) ) {
 			$this->dieWithError( 'apierror-parsoid-batch-invalidbatch', 'invalid_batch' );
 		}
+		// @phan-suppress-next-line PhanTypeMismatchArgumentNullableInternal
 		if ( count( $batch ) > 500 ) {
 			$this->dieWithError( 'apierror-parsoid-batch-batchtoolarge', 'batch_too_large' );
 		}
 		wfIncrStats( 'ParsoidBatchAPI.batches' );
+		// @phan-suppress-next-line PhanTypeMismatchArgumentNullableInternal
 		wfIncrStats( 'ParsoidBatchAPI.items', count( $batch ) );
 
 		$size = 0;
@@ -105,6 +107,7 @@ class ApiParsoidBatch extends ApiBase {
 					}
 					$pTitle = $title;
 					$title = $rev->getTitle();
+					// @phan-suppress-next-line PhanTypeMismatchArgumentNullable
 					if ( !$title->equals( $pTitle ) ) {
 						$this->addWarning( [ 'apierror-revwrongpage', $rev->getId(),
 							wfEscapeWikiText( $pTitle->getPrefixedText() ) ] );
@@ -113,9 +116,11 @@ class ApiParsoidBatch extends ApiBase {
 				$text = $itemParams['text'];
 				switch ( $action ) {
 					case 'parse':
+						// @phan-suppress-next-line PhanTypeMismatchArgumentNullable
 						$itemResult = $this->parse( $text, $title, $revid );
 						break;
 					case 'preprocess':
+						// @phan-suppress-next-line PhanTypeMismatchArgumentNullable
 						$itemResult = $this->preprocess( $text, $title, $revid );
 						break;
 				}
@@ -187,6 +192,7 @@ class ApiParsoidBatch extends ApiBase {
 		if ( is_callable( [ $options, 'setWrapOutputClass' ] ) &&
 			!defined( 'ParserOutput::SUPPORTS_UNWRAP_TRANSFORM' )
 		) {
+			// @phan-suppress-next-line PhanTypeMismatchArgument
 			$options->setWrapOutputClass( false ); // Parsoid doesn't want the output wrapper
 		}
 		$out = $parser->parse( $text, $title, $options, true, true, $revid );
