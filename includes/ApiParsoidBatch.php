@@ -182,12 +182,7 @@ class ApiParsoidBatch extends ApiBase {
 	protected function parse( $text, Title $title, $revid ) {
 		$parser = MediaWikiServices::getInstance()->getParser();
 
-		if ( defined( 'ParserOptions::HAS_NEWCANONICAL_FROM_CONTEXT' ) ) {
-			$options = ParserOptions::newCanonical( $this->getContext() );
-		} else {
-			$contentHandler = ContentHandler::getForModelID( CONTENT_MODEL_WIKITEXT );
-			$options = $contentHandler->makeParserOptions( $this->getContext() );
-		}
+		$options = ParserOptions::newCanonical( $this->getContext() );
 		$options->enableLimitReport( false );
 		if ( is_callable( [ $options, 'setWrapOutputClass' ] ) &&
 			!defined( 'ParserOutput::SUPPORTS_UNWRAP_TRANSFORM' )
@@ -220,12 +215,7 @@ class ApiParsoidBatch extends ApiBase {
 	protected function preprocess( $text, Title $title, $revid ) {
 		$parser = MediaWikiServices::getInstance()->getParser();
 
-		if ( defined( 'ParserOptions::HAS_NEWCANONICAL_FROM_CONTEXT' ) ) {
-			$options = ParserOptions::newCanonical( $this->getContext() );
-		} else {
-			$contentHandler = ContentHandler::getForModelID( CONTENT_MODEL_WIKITEXT );
-			$options = $contentHandler->makeParserOptions( $this->getContext() );
-		}
+		$options = ParserOptions::newCanonical( $this->getContext() );
 		$wikitext = $parser->preprocess( $text, $title, $options, $revid );
 		$out = $parser->getOutput();
 		$result = [
