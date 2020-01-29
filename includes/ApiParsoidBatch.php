@@ -123,6 +123,8 @@ class ApiParsoidBatch extends ApiBase {
 						// @phan-suppress-next-line PhanTypeMismatchArgumentNullable
 						$itemResult = $this->preprocess( $text, $title, $revid );
 						break;
+					default:
+						throw new Exception( "Invalid action despite validation already being done" );
 				}
 			} elseif ( $action === 'imageinfo' ) {
 				$filename = $itemParams['filename'];
