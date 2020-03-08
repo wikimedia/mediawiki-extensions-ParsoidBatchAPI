@@ -82,7 +82,7 @@ class ApiParsoidBatch extends ApiBase {
 
 		// Now do the thing
 		if ( count( $filenames ) ) {
-			$files = RepoGroup::singleton()->findFiles( $filenames );
+			$files = MediaWikiServices::getInstance()->getRepoGroup()->findFiles( $filenames );
 		} else {
 			$files = [];
 		}
