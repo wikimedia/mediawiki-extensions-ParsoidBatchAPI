@@ -313,7 +313,7 @@ class ApiParsoidBatch extends ApiBase {
 	 * @param string $filename
 	 * @param File|null $file
 	 * @param array $txopts
-	 * @param Title|null $page Title for wfIsBadImage() context
+	 * @param Title|null $page Title for BadFileLookup::isBadFile context
 	 *
 	 * @return array|null
 	 */
@@ -330,7 +330,8 @@ class ApiParsoidBatch extends ApiBase {
 			'mime' => $file->getMimeType(),
 			'url' => wfExpandUrl( $file->getFullUrl(), PROTO_CURRENT ),
 			'mustRender' => $file->mustRender(),
-			'badFile' => (bool)wfIsBadImage( $filename, $page ?: false ),
+			'badFile' => MediaWikiServices::getInstance()->getBadFileLookup()
+				->isBadFile( $filename, $page ?: null ),
 		];
 		$length = $file->getLength();
 		if ( $length ) {
