@@ -89,6 +89,7 @@ class ApiParsoidBatch extends ApiBase {
 
 		$batchResult = [];
 		$result = $this->getResult();
+		$revLookup = MediaWikiServices::getInstance()->getRevisionLookup();
 		foreach ( $batch as $itemIndex => $itemParams ) {
 			$action = $itemParams['action'];
 			if ( $action === 'parse' || $action === 'preprocess' ) {
@@ -101,14 +102,13 @@ class ApiParsoidBatch extends ApiBase {
 				$revid = null;
 				if ( isset( $itemParams['revid'] ) ) {
 					$revid = intval( $itemParams['revid'] );
-					$rev = Revision::newFromId( $revid );
+					$rev = $revLookup->getRevisionById( $revid );
 					if ( !$rev ) {
 						$this->dieWithError( [ 'apierror-nosuchrevid', $revid ] );
 					}
 					$pTitle = $title;
-					$title = $rev->getTitle();
-					// @phan-suppress-next-line PhanTypeMismatchArgumentNullable
-					if ( !$title->equals( $pTitle ) ) {
+					$title = $rev->getPageAsLinkTarget();
+					if ( !$pTitle->equals( $title ) ) {
 						$this->addWarning( [ 'apierror-revwrongpage', $rev->getId(),
 							wfEscapeWikiText( $pTitle->getPrefixedText() ) ] );
 					}
