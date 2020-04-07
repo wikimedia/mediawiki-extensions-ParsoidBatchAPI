@@ -3,8 +3,8 @@
 		"authors": [
 			"Derugon",
 			"Gomoko",
-			"Wladek92",
-			"Thibaut120094"
+			"Thibaut120094",
+			"Wladek92"
 		]
 	},
 	"apihelp-parsoid-batch-description": "API de regroupement (pour Parsoid) pour exécuter par lot les requêtes API de MediaWiki",

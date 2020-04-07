@@ -1,8 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Raimond Spekking",
-			"Liuxinyu970226"
+			"Liuxinyu970226",
+			"Raimond Spekking"
 		]
 	},
 	"parsoidbatchapi-desc": "{{desc|name=ParsoidBatchAPI|url=https://www.mediawiki.org/wiki/Extension:ParsoidBatchAPI}}"

@@ -1,10 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Yllelder",
-			"Macofe",
 			"Dgstranz",
-			"Fitoschido"
+			"Fitoschido",
+			"Macofe",
+			"Yllelder"
 		]
 	},
 	"parsoidbatchapi-desc": "API de lotes para Parsoid"

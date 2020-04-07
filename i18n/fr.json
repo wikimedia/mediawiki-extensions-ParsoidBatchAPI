@@ -1,10 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Momo50WM",
 			"Derugon",
-			"Wladek92",
-			"Gomoko"
+			"Gomoko",
+			"Momo50WM",
+			"Wladek92"
 		]
 	},
 	"parsoidbatchapi-desc": "Lot d'API pour Parsoid"

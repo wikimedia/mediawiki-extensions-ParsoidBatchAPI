@@ -1,8 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Mormegil",
-			"Meliganai"
+			"Meliganai",
+			"Mormegil"
 		]
 	},
 	"parsoidbatchapi-desc": "Dávkové API pro Parsoid"

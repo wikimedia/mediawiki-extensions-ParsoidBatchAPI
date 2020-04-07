@@ -1,8 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Elisardojm",
-			"Banjo"
+			"Banjo",
+			"Elisardojm"
 		]
 	},
 	"parsoidbatchapi-desc": "API de traballo por lotes para Parsoid"

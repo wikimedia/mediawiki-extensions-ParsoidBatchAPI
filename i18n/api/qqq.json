@@ -1,8 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Raimond Spekking",
-			"Liuxinyu970226"
+			"Liuxinyu970226",
+			"Raimond Spekking"
 		]
 	},
 	"apihelp-parsoid-batch-description": "{{doc-apihelp-description|parsoid-batch}}",
