@@ -1,20 +1,24 @@
+/* eslint-env node, es6 */
 module.exports = function ( grunt ) {
 	var conf = grunt.file.readJSON( 'extension.json' );
-	grunt.loadNpmTasks( 'grunt-jsonlint' );
+	grunt.loadNpmTasks( 'grunt-eslint' );
 	grunt.loadNpmTasks( 'grunt-banana-checker' );
 
 	grunt.initConfig( {
 		banana: conf.MessagesDirs,
-		jsonlint: {
+		eslint: {
+			options: {
+				cache: true
+			},
 			all: [
-				'**/*.json',
+				'**/*.{js,json}',
 				'!node_modules/**',
 				'!vendor/**'
 			]
 		}
 	} );
 
-	grunt.registerTask( 'lint', ['jsonlint', 'banana'] );
-	grunt.registerTask( 'test', ['lint'] );
-	grunt.registerTask( 'default', ['test'] );
+	grunt.registerTask( 'lint', [ 'eslint', 'banana' ] );
+	grunt.registerTask( 'test', [ 'lint' ] );
+	grunt.registerTask( 'default', [ 'test' ] );
 };
